@@ -1,11 +1,12 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {IPokemon} from '../../models/IPokemon';
-import {getPokemonDetails, getPokemonsWithImages} from '../../services/api.service';
+import {getPokemonDetails, getPokemonsWithImages, getSearchedPokemonsByName} from '../../services/api.service';
 import {RootState} from "../store";
 
 type PokemonState = {
     pokemons: IPokemon[];
     pokemon: IPokemon | null;
+    searcResults: IPokemon[];
     error: string | null;
     isLoaded: boolean;
     offset: number
@@ -14,10 +15,13 @@ type PokemonState = {
 const initialState: PokemonState = {
     pokemons: [],
     pokemon: null,
+    searcResults: [],
     error: null,
     isLoaded: false,
     offset: 0
 }
+
+
 
 export const loadPokemons = createAsyncThunk<
     IPokemon[],
@@ -33,6 +37,12 @@ export const loadPokemon = createAsyncThunk('pokemon/loadPokemon', async (id: nu
     const pokemon = await getPokemonDetails(id)
     return pokemon
 })
+
+export const loadSearchedPokemonsByName = createAsyncThunk('pokemon/loadSearchedPokemonsByName',
+    async (name:string) => {
+        const result = await getSearchedPokemonsByName(name)
+        return result
+    })
 
 export const pokemonSlice = createSlice({
     name: 'pokemon',
@@ -68,6 +78,18 @@ export const pokemonSlice = createSlice({
                 state.error = action.error.message || 'Failed to load pokemon'
                 state.isLoaded = true
             })
+            .addCase(loadSearchedPokemonsByName.fulfilled, (state, action) => {
+                state.searcResults = action.payload
+                state.isLoaded = true
+            })
+            .addCase(loadSearchedPokemonsByName.pending, (state) => {
+                state.isLoaded = false
+                state.error = null
+            })
+            .addCase(loadSearchedPokemonsByName.rejected, (state, action) => {
+                state.error = action.error.message || 'failed to search'
+                state.isLoaded = true
+            })
     }
 })
 
@@ -75,6 +97,7 @@ export const { setOffset } = pokemonSlice.actions
 export const pokemonActions = {
     loadPokemons,
     loadPokemon,
+    loadSearchedPokemonsByName,
     setOffset
 }
 export const pokemonReducer = pokemonSlice.reducer
