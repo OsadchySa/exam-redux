@@ -1,29 +1,28 @@
-import React, { FC, useEffect, useState } from 'react';
-import { IPokemon } from '../models/IPokemon';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { loadPokemons, setOffset } from "../redux/slice/pokemonSlice";
 import { Link } from 'react-router-dom';
-import { getPokemonsWithImages } from '../services/api.service';
 
-const Pokemons: FC = () => {
-    const [pokemons, setPokemons] = useState<IPokemon[]>([])
-    const [offset, setOffset] = useState(0)
+const PokemonsComponent: React.FC = () => {
+    const dispatch = useAppDispatch();
+    const { pokemons, isLoaded, error, offset } = useAppSelector((state) => state.pokemon);
 
     useEffect(() => {
-        const fetchPokemons = async () => {
-            const data = await getPokemonsWithImages(offset)
-            setPokemons(data)
-        };
-        fetchPokemons()
-    }, [offset])
+        dispatch(loadPokemons());
+    }, [dispatch, offset]);
 
     const handleNext = () => {
-        setOffset(prev => prev + 20)
-    }
+        dispatch(setOffset(offset + 20));
+    };
 
     const handlePrev = () => {
         if (offset > 0) {
-            setOffset(prev => prev - 20)
+            dispatch(setOffset(offset - 20));
         }
-    }
+    };
+
+    if (!isLoaded) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <div>
@@ -38,10 +37,10 @@ const Pokemons: FC = () => {
                 ))}
             </div>
             <div className="pagination">
-                <button className={'pagButton'} onClick={handlePrev} disabled={offset === 0}>
+                <button className="pagButton" onClick={handlePrev} disabled={offset === 0}>
                     Prev
                 </button>
-                <button className={'pagButton'} onClick={handleNext}>
+                <button className="pagButton" onClick={handleNext}>
                     Next
                 </button>
             </div>
@@ -49,4 +48,4 @@ const Pokemons: FC = () => {
     );
 };
 
-export default Pokemons;
+export default PokemonsComponent;

@@ -1,10 +1,9 @@
 export interface IPokemon {
     id: number;
     name: string;
+    image: string;
     abilities: { ability: { name: string } }[];
-    stats: { base_stat: number, stat: { name: string } }[];
+    stats: { stat: { name: string }, base_stat: number }[];
     types: { type: { name: string } }[];
-    sprites: { front_default: string };
-    forms: { name: string }[];
-    image: string
+    forms: { name: string }[]
 }

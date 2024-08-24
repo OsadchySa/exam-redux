@@ -1,13 +1,17 @@
-import {configureStore} from "@reduxjs/toolkit";
-import {pokemonSlice} from "./slice/pokemonSlice";
-import {useDispatch, useSelector} from "react-redux";
-
+import { configureStore } from '@reduxjs/toolkit';
+import {pokemonReducer} from "./slice/pokemonSlice";
+import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
 export const store = configureStore({
     reducer: {
-        pokemonStore: pokemonSlice.reducer,
-    }
-})
+        pokemon: pokemonReducer, // Додайте інші редюсери, якщо є
+    },
+});
 
-export const useAppDispatch = useDispatch.withTypes<typeof store.dispatch>()
-export const useAppSelector = useSelector.withTypes<ReturnType<typeof store.getState>>()
+// Типізація RootState і AppDispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+// Кастомні хуки (якщо використовуються)
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
