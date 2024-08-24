@@ -5,15 +5,16 @@ import { pokemonActions } from "../redux/slice/pokemonSlice";
 import { RootState } from "../redux/store"; // Імпорт RootState з вашого store
 
 const PokemonPage: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const { pokemonId } = useParams<{ pokemonId: string }>();
+    console.log(pokemonId) //undefined ?
     const dispatch = useAppDispatch();
     const { pokemon, isLoaded, error } = useAppSelector((state: RootState) => state.pokemon); // Додали RootState
 
     useEffect(() => {
-        if (id) {
-            dispatch(pokemonActions.loadPokemon(parseInt(id)));
+        if (pokemonId) {
+            dispatch(pokemonActions.loadPokemon(parseInt(pokemonId)));
         }
-    }, [id, dispatch]);
+    }, [pokemonId, dispatch]);
 
     if (!isLoaded) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;

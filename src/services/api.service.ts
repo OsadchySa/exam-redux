@@ -16,7 +16,6 @@ export const getPokemonsWithImages = async (offset = 0, limit = 20) => {
     })
 
     const pokemonsWithImages = await Promise.all(pokemonDetailsPromises)
-    console.log(pokemonsWithImages)
     return pokemonsWithImages
 }
 
