@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
 import PokemonsPage from "../pages/PokemonsPage";
 import PokemonPage from "../pages/PokemonPage";
+import FavPokemonsPage from "../pages/FavPokemonsPage";
 
 
 export let router = createBrowserRouter([
@@ -13,7 +14,8 @@ export let router = createBrowserRouter([
         children: [
             {index: true, element: <HomePage/>},
             {path: 'pokemons', element: <PokemonsPage/>},
-            {path: 'pokemons/:pokemonId', element: <PokemonPage/>}
+            {path: 'pokemons/:pokemonId', element: <PokemonPage/>},
+            {path: 'favorites', element: <FavPokemonsPage/>}
         ]
     }
 ])
