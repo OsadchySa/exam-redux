@@ -5,42 +5,42 @@ import { pokemonActions } from "../redux/slice/pokemonSlice";
 import { RootState } from "../redux/store";
 
 const PokemonPage: React.FC = () => {
-    const { pokemonId } = useParams<{pokemonId: string }>();
-    const dispatch = useAppDispatch();
-    const { pokemon, isLoaded, error } = useAppSelector((state: RootState) => state.pokemon);
-    const [isFavorite, setIsFavorite] = useState(false);
+    const { pokemonId } = useParams<{pokemonId: string }>()
+    const dispatch = useAppDispatch()
+    const { pokemon, isLoaded, error } = useAppSelector((state: RootState) => state.pokemon)
+    const [isFavorite, setIsFavorite] = useState(false)
 
     useEffect(() => {
         if (pokemonId) {
-            dispatch(pokemonActions.loadPokemon(parseInt(pokemonId)));
+            dispatch(pokemonActions.loadPokemon(parseInt(pokemonId)))
         }
-    }, [pokemonId, dispatch]);
+    }, [pokemonId, dispatch])
 
     useEffect(() => {
         if (pokemon) {
             // Check if this Pokémon is in localStorage favorites
-            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-            setIsFavorite(favorites.some((fav: { id: number }) => fav.id === pokemon.id));
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]')
+            setIsFavorite(favorites.some((fav: { id: number }) => fav.id === pokemon.id))
         }
-    }, [pokemon]);
+    }, [pokemon])
 
     const handleToggleFavorite = () => {
         if (pokemon) {
-            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]')
             if (isFavorite) {
-                const updatedFavorites = favorites.filter((fav: { id: number }) => fav.id !== pokemon.id);
-                localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+                const updatedFavorites = favorites.filter((fav: { id: number }) => fav.id !== pokemon.id)
+                localStorage.setItem('favorites', JSON.stringify(updatedFavorites))
             } else {
-                const updatedFavorites = [...favorites, pokemon];
-                localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+                const updatedFavorites = [...favorites, pokemon]
+                localStorage.setItem('favorites', JSON.stringify(updatedFavorites))
             }
-            setIsFavorite(!isFavorite);
+            setIsFavorite(!isFavorite)
         }
     };
 
-    if (!isLoaded) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!pokemon) return <div>No Pokémon data found.</div>;
+    if (!isLoaded) return <div>Loading...</div>
+    if (error) return <div>Error: {error}</div>
+    if (!pokemon) return <div>No Pokémon data found.</div>
 
     return (
         <div>
@@ -54,7 +54,7 @@ const PokemonPage: React.FC = () => {
                 {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
             </button>
         </div>
-    );
-};
+    )
+}
 
-export default PokemonPage;
+export default PokemonPage
