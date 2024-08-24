@@ -39,3 +39,21 @@ export const getPokemonDetails = async (id: number) => {
     }
 }
 
+
+
+export const getSearchedPokemonsByName = async (name: string) => {
+    const response = await fetch(`${baseUrl}/pokemon/${name}`)
+    return response.json()
+}
+
+export const getPokemonsByType = async (type: string) => {
+    const response = await fetch(`${baseUrl}/type/${type}`)
+    return response.json()
+}
+
+export const getPokemonsByAbility = async (ability: string) => {
+    const response = await fetch(`${baseUrl}/ability/${ability}`)
+    return response.json()
+}
+
+
