@@ -1,12 +1,20 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {IPokemon} from '../../models/IPokemon';
-import {getPokemonDetails, getPokemonsWithImages, getSearchedPokemonsByName} from '../../services/api.service';
+import {
+    getPokemonDetails,
+    getPokemonsByAbility,
+    getPokemonsByType,
+    getPokemonsWithImages,
+    getSearchedPokemonsByName
+} from '../../services/api.service';
 import {RootState} from "../store";
+
+
 
 type PokemonState = {
     pokemons: IPokemon[];
     pokemon: IPokemon | null;
-    searcResults: IPokemon[];
+    searchResults: IPokemon[];
     error: string | null;
     isLoaded: boolean;
     offset: number
@@ -15,7 +23,7 @@ type PokemonState = {
 const initialState: PokemonState = {
     pokemons: [],
     pokemon: null,
-    searcResults: [],
+    searchResults: [],
     error: null,
     isLoaded: false,
     offset: 0
@@ -38,11 +46,44 @@ export const loadPokemon = createAsyncThunk('pokemon/loadPokemon', async (id: nu
     return pokemon
 })
 
-export const loadSearchedPokemonsByName = createAsyncThunk('pokemon/loadSearchedPokemonsByName',
+export const loadPokemonsByName = createAsyncThunk('pokemon/loadSearchedPokemonsByName',
     async (name:string) => {
         const result = await getSearchedPokemonsByName(name)
         return result
-    })
+})
+
+export const loadPokemonsByType = createAsyncThunk('pokemon/loadPokemonsByType',
+    async (type: string) => {
+        const result = await getPokemonsByType(type)
+        const detailedPokemons = await Promise.all(result.map(async (poke: {url: string}) => {
+            const response = await fetch(poke.url)
+            const data = await response.json()
+            return{
+                name: data.name,
+                image: data.sprites.front_default
+            }}))
+        console.log(detailedPokemons)
+        return detailedPokemons
+    }
+)
+
+export const loadPokemonsByAbility = createAsyncThunk(
+    'pokemon/loadPokemonsByAbility',
+    async (ability: string) => {
+        const result = await getPokemonsByAbility(ability)
+        const detailedPokemons = await Promise.all(result.map(async (poke: { url: string }) => {
+            const response = await fetch(poke.url)
+            const data = await response.json()
+            return {
+                name: data.name,
+                image: data.sprites.front_default
+            }
+        }))
+        console.log(detailedPokemons)
+        return detailedPokemons
+    }
+)
+
 
 export const pokemonSlice = createSlice({
     name: 'pokemon',
@@ -78,15 +119,39 @@ export const pokemonSlice = createSlice({
                 state.error = action.error.message || 'Failed to load pokemon'
                 state.isLoaded = true
             })
-            .addCase(loadSearchedPokemonsByName.fulfilled, (state, action) => {
-                state.searcResults = action.payload
+            .addCase(loadPokemonsByName.fulfilled, (state, action) => {
+                state.searchResults = [action.payload]
                 state.isLoaded = true
             })
-            .addCase(loadSearchedPokemonsByName.pending, (state) => {
+            .addCase(loadPokemonsByName.pending, (state) => {
                 state.isLoaded = false
                 state.error = null
             })
-            .addCase(loadSearchedPokemonsByName.rejected, (state, action) => {
+            .addCase(loadPokemonsByName.rejected, (state, action) => {
+                state.error = action.error.message || 'failed to search'
+                state.isLoaded = true
+            })
+            .addCase(loadPokemonsByType.fulfilled, (state, action) => {
+                state.searchResults = action.payload;
+                state.isLoaded = true;
+            })
+            .addCase(loadPokemonsByType.pending, (state) => {
+                state.isLoaded = false
+                state.error = null
+            })
+            .addCase(loadPokemonsByType.rejected, (state, action) => {
+                state.error = action.error.message || 'failed to search'
+                state.isLoaded = true
+            })
+            .addCase(loadPokemonsByAbility.fulfilled, (state, action) => {
+                state.searchResults = action.payload;
+                state.isLoaded = true;
+            })
+            .addCase(loadPokemonsByAbility.pending, (state) => {
+                state.isLoaded = false
+                state.error = null
+            })
+            .addCase(loadPokemonsByAbility.rejected, (state, action) => {
                 state.error = action.error.message || 'failed to search'
                 state.isLoaded = true
             })
@@ -97,7 +162,9 @@ export const { setOffset } = pokemonSlice.actions
 export const pokemonActions = {
     loadPokemons,
     loadPokemon,
-    loadSearchedPokemonsByName,
+    loadPokemonsByName,
+    loadPokemonsByType,
+    loadPokemonsByAbility,
     setOffset
 }
 export const pokemonReducer = pokemonSlice.reducer

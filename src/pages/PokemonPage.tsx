@@ -45,11 +45,11 @@ const PokemonPage: React.FC = () => {
     return (
         <div>
             <h1>{pokemon.name}</h1>
-            <img src={pokemon.image} alt={pokemon.name} />
-            <p><strong>Abilities:</strong> {pokemon.abilities ? pokemon.abilities.map((ability: { ability: { name: string } }) => ability.ability.name).join(', ') : 'N/A'}</p>
-            <p><strong>Stats:</strong> {pokemon.stats ? pokemon.stats.map((stat: { stat: { name: string }; base_stat: number }) => `${stat.stat.name}: ${stat.base_stat}`).join(', ') : 'N/A'}</p>
-            <p><strong>Types:</strong> {pokemon.types ? pokemon.types.map((type: { type: { name: string } }) => type.type.name).join(', ') : 'N/A'}</p>
-            <p><strong>Forms:</strong> {pokemon.forms ? pokemon.forms.map((form: { name: string }) => form.name).join(', ') : 'N/A'}</p>
+            <img src={pokemon.image} alt={pokemon.name}/>
+            <p><strong>Abilities:</strong> {pokemon.abilities.map((ability: { ability: { name: string } }) => ability.ability.name).join(', ')}</p>
+            <p><strong>Stats:</strong> {pokemon.stats.map((stat: { stat: { name: string }; base_stat: number }) => `${stat.stat.name}: ${stat.base_stat}`).join(', ')}</p>
+            <p><strong>Types:</strong> {pokemon.types.map((type: { type: { name: string } }) => type.type.name).join(', ')}</p>
+            <p><strong>Forms:</strong> {pokemon.forms.map((form: { name: string }) => form.name).join(', ')}</p>
             <button onClick={handleToggleFavorite}>
                 {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
             </button>

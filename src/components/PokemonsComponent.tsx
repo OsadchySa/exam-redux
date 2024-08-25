@@ -4,25 +4,25 @@ import { loadPokemons, setOffset } from "../redux/slice/pokemonSlice";
 import { Link } from 'react-router-dom';
 
 const PokemonsComponent: React.FC = () => {
-    const dispatch = useAppDispatch();
-    const { pokemons, isLoaded, error, offset } = useAppSelector((state) => state.pokemon);
+    const dispatch = useAppDispatch()
+    const { pokemons, isLoaded, error, offset } = useAppSelector((state) => state.pokemon)
 
     useEffect(() => {
-        dispatch(loadPokemons());
-    }, [dispatch, offset]);
+        dispatch(loadPokemons())
+    }, [dispatch, offset])
 
     const handleNext = () => {
-        dispatch(setOffset(offset + 20));
+        dispatch(setOffset(offset + 20))
     };
 
     const handlePrev = () => {
         if (offset > 0) {
-            dispatch(setOffset(offset - 20));
+            dispatch(setOffset(offset - 20))
         }
-    };
+    }
 
-    if (!isLoaded) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    if (!isLoaded) return <div>Loading...</div>
+    if (error) return <div>Error: {error}</div>
 
     return (
         <div>
@@ -45,7 +45,7 @@ const PokemonsComponent: React.FC = () => {
                 </button>
             </div>
         </div>
-    );
-};
+    )
+}
 
 export default PokemonsComponent;
