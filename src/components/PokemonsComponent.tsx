@@ -48,4 +48,4 @@ const PokemonsComponent: React.FC = () => {
     )
 }
 
-export default PokemonsComponent;
+export default PokemonsComponent

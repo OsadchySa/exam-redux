@@ -6,6 +6,7 @@ import PokemonPage from "../pages/PokemonPage";
 import FavPokemonsPage from "../pages/FavPokemonsPage";
 import SearchPage from "../pages/SearchPage";
 import SearchByTypeOrAbilityPage from "../pages/SearchByTypeOrAbilityPage";
+import PokemonFormPage from "../pages/PokemonFormPage";
 
 
 export let router = createBrowserRouter([
@@ -19,7 +20,8 @@ export let router = createBrowserRouter([
             {path: 'pokemons/:pokemonId', element: <PokemonPage/>},
             {path: 'favorites', element: <FavPokemonsPage/>},
             {path: 'found', element: <SearchPage/>},
-            {path: 'search/:searchType/:query', element: <SearchByTypeOrAbilityPage/>}
+            {path: 'search/:searchType/:query', element: <SearchByTypeOrAbilityPage/>},
+            {path: 'pokemon-form/:formId', element: <PokemonFormPage/>}
         ]
     }
 ])

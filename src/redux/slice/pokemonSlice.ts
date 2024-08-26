@@ -5,9 +5,11 @@ import {
     getPokemonsByAbility,
     getPokemonsByType,
     getPokemonsWithImages,
-    getSearchedPokemonsByName
+    getSearchedPokemonsByName,
+    getPokemonForm
 } from '../../services/api.service';
 import {RootState} from "../store";
+import {IPokemonForm} from "../../models/IPokemonForm";
 
 
 
@@ -16,6 +18,7 @@ type PokemonState = {
     pokemon: IPokemon | null;
     searchResults: IPokemon[];
     error: string | null;
+    selectedForm: IPokemonForm | null;
     isLoaded: boolean;
     offset: number
 }
@@ -24,6 +27,7 @@ const initialState: PokemonState = {
     pokemons: [],
     pokemon: null,
     searchResults: [],
+    selectedForm: null,
     error: null,
     isLoaded: false,
     offset: 0
@@ -81,6 +85,14 @@ export const loadPokemonsByAbility = createAsyncThunk(
         }))
         console.log(detailedPokemons)
         return detailedPokemons
+    }
+)
+
+export const loadPokemonForm = createAsyncThunk(
+    'pokemon/loadPokemonForm',
+    async (formId: string) => {
+        const formData = await getPokemonForm(formId)
+        return formData
     }
 )
 
@@ -155,6 +167,18 @@ export const pokemonSlice = createSlice({
                 state.error = action.error.message || 'failed to search'
                 state.isLoaded = true
             })
+            .addCase(loadPokemonForm.fulfilled, (state, action) => {
+            state.selectedForm = action.payload; // Зберігаємо дані форми в стані
+            state.isLoaded = true;
+        })
+            .addCase(loadPokemonForm.pending, (state) => {
+                state.isLoaded = false;
+                state.error = null;
+            })
+            .addCase(loadPokemonForm.rejected, (state, action) => {
+                state.error = action.error.message || 'Failed to load form data'
+                state.isLoaded = true;
+            })
     }
 })
 
@@ -165,6 +189,7 @@ export const pokemonActions = {
     loadPokemonsByName,
     loadPokemonsByType,
     loadPokemonsByAbility,
+    loadPokemonForm,
     setOffset
 }
 export const pokemonReducer = pokemonSlice.reducer

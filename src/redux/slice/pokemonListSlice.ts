@@ -6,15 +6,15 @@ interface PokemonListState {
     pokemons: IPokemon[];
     isLoaded: boolean;
     error: string | null;
-    offset: number;
+    offset: number
 }
 
 const initialState: PokemonListState = {
     pokemons: [],
     isLoaded: false,
     error: null,
-    offset: 0,
-};
+    offset: 0
+}
 
 export const loadPokemons = createAsyncThunk<
     IPokemon[],
@@ -24,26 +24,26 @@ export const loadPokemons = createAsyncThunk<
     'pokemonList/loadPokemons',
     async (offset, thunkAPI) => {
         try {
-            const data = await getPokemonsWithImages(offset);
-            return data;
+            const data = await getPokemonsWithImages(offset)
+            return data
         } catch (error) {
-            return thunkAPI.rejectWithValue('Failed to fetch Pokémon list');
+            return thunkAPI.rejectWithValue('Failed to fetch Pokémon list')
         }
     }
-);
+)
 
 const pokemonListSlice = createSlice({
     name: 'pokemonList',
     initialState,
     reducers: {
         incrementOffset: (state) => {
-            state.offset += 20;
+            state.offset += 20
         },
         decrementOffset: (state) => {
             if (state.offset > 0) {
-                state.offset -= 20;
+                state.offset -= 20
             }
-        },
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -58,9 +58,9 @@ const pokemonListSlice = createSlice({
             .addCase(loadPokemons.rejected, (state, action) => {
                 state.error = action.payload as string;
                 state.isLoaded = true;
-            });
+            })
     }
-});
+})
 
 export const { incrementOffset, decrementOffset } = pokemonListSlice.actions;
 export default pokemonListSlice.reducer;

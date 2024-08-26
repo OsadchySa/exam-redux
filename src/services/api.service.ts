@@ -77,3 +77,28 @@ export const getPokemonsByAbility = async (ability: string) => {
 }
 
 
+export const getPokemonForm = async (formId: string) => {
+    try {
+        const response = await fetch(`${baseUrl}/pokemon-form/${formId}/`)
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`)
+        }
+        const data = await response.json()
+
+
+        const abilities = data.abilities ? data.abilities.map((ability: any) => ability.ability.name) : []
+        const types = data.types ? data.types.map((type: any) => type.type.name) : []
+
+        return {
+            name: data.name,
+            imageUrl: data.sprites.front_default,
+            abilities: abilities,
+            types: types
+        }
+    } catch (error) {
+        console.error('Failed to fetch form data:', error)
+        throw new Error('Failed to fetch form data')
+    }
+}
+
+

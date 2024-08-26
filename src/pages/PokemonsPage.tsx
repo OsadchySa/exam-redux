@@ -1,10 +1,10 @@
 import React from 'react';
-import Pokemons from "../components/PokemonsComponent";
+import PokemonsComponent from "../components/PokemonsComponent";
 
 const PokemonsPage = () => {
     return (
         <div>
-            <Pokemons/>
+            <PokemonsComponent/>
         </div>
     );
 };

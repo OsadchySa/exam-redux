@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from "../redux/store";
-import { useParams } from "react-router-dom";
-import { pokemonActions } from "../redux/slice/pokemonSlice";
+import React, {useEffect} from 'react';
+import {useAppDispatch, useAppSelector} from "../redux/store";
+import {useParams} from "react-router-dom";
+import {pokemonActions} from "../redux/slice/pokemonSlice";
 
 const SearchByTypeOrAbilityPage = () => {
-    const { searchResults, isLoaded, error } = useAppSelector((state) => state.pokemon);
+    const { searchResults, isLoaded, error } = useAppSelector((state) => state.pokemon)
     const { searchType, query } = useParams();
     const dispatch = useAppDispatch();
     console.log(query)
@@ -18,19 +18,21 @@ const SearchByTypeOrAbilityPage = () => {
                 dispatch(pokemonActions.loadPokemonsByAbility(query))
             }
         }
-    }, [searchType, query, dispatch]);
+    }, [searchType, query, dispatch])
 
     if (!isLoaded) return <div>Loading...</div>
     if (error) return <div>{error}</div>
     if (searchResults.length === 0) return <div>No results found</div>
 
     return (
-        <div className="searchResults">
+        <div className="allPokDiv">
             {searchResults.map((pokemon, index) => (
-                <div className="pokemonCard" key={index}>
+
+                <div className={'miniPokDiv'}>
                     <h3>{pokemon.name}</h3>
                     <img src={pokemon.image} alt={pokemon.name}/>
                 </div>
+
             ))}
         </div>
     )
