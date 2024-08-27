@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import {pokemonReducer} from "./slice/pokemonSlice";
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 

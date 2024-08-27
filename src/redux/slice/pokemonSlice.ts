@@ -103,7 +103,7 @@ export const pokemonSlice = createSlice({
     reducers: {
         setOffset: (state, action) => {
             state.offset = action.payload
-        },
+        }
     },
     extraReducers: (builder) => {
         builder

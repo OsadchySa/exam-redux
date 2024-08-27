@@ -4,11 +4,11 @@ import { IPokemon } from "../models/IPokemon";
 
 const SearchPage = () => {
     const { searchResults, isLoaded, error } =
-        useAppSelector((state) => state.pokemon);
+        useAppSelector((state) => state.pokemon)
 
-    if (!isLoaded) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
-    if (!searchResults || searchResults.length === 0) return <div>No results found</div>;
+    if (!isLoaded) return <div>Loading...</div>
+    if (error) return <div>{error}</div>
+    if (!searchResults || searchResults.length === 0) return <div>No results found</div>
 
 
     return (
